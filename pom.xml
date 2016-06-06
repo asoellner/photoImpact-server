@@ -27,6 +27,12 @@
             <version>LATEST</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
     </dependencies>
 
     <packaging>war</packaging>
