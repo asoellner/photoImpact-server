@@ -26,12 +26,12 @@
             <artifactId>eclipselink</artifactId>
             <version>LATEST</version>
         </dependency>
-
         <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-multipart</artifactId>
-            <version>LATEST</version>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20090211</version>
         </dependency>
+
 
     </dependencies>
 

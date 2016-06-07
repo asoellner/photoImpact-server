@@ -1,3 +1,5 @@
+package com.soellner.photoImpactServer;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +15,11 @@ import java.net.URL;
 /**
  * Created by asoel on 01.06.2016.
  */
-@WebServlet(name = "hello", urlPatterns = "/")
+@WebServlet(name = "com.soellner.photoImpactServer.HelloServlet", urlPatterns = "/Sepp")
 public class HelloServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write("Hello Sepp");
+        resp.getWriter().write("Hello Eins ");
     }
 
 

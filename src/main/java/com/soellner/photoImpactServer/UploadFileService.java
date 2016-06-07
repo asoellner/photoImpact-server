@@ -1,5 +1,7 @@
+package com.soellner.photoImpactServer;
+
 import com.sun.jersey.core.header.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
+//import org.glassfish.jersey.media.multipart.FormDataParam;
 import sun.misc.IOUtils;
 
 import javax.ws.rs.*;
@@ -16,7 +18,16 @@ import java.util.zip.ZipException;
 @Path("/files")
 public class UploadFileService {
 
-    @POST
+
+
+    @GET
+    @Produces(MediaType.TEXT_XML)
+    @Path("/test2")
+    public String sayXMLHello2() {
+        return "<?xml version=\"1.0\"?>" + "<hello> Hello Jersey2" + "</hello>";
+    }
+
+   /* @POST
     @Path("upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public void uploadFile(@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) throws Exception {
@@ -30,15 +41,15 @@ public class UploadFileService {
                 os.write(b, 0, length);
             }
         } catch (IOException ex) {
-            Logger.getLogger(UploadFileService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(com.soellner.photoImpactServer.UploadFileService.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 os.close();
             } catch (IOException ex) {
-                Logger.getLogger(UploadFileService.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(com.soellner.photoImpactServer.UploadFileService.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
 
-    }
+    }*/
 }
