@@ -46,7 +46,7 @@ public class GreetingController {
             }
 
             JSONObject jsonObject = new JSONObject(crunchifyBuilder.toString());
-            String imageAsBase64=(String)jsonObject.get("image");
+            String imageAsBase64 = (String) jsonObject.get("image");
             //byte[] decodedBytes = Base64.decode(imageAsBase64);
 
             BufferedImage image = null;
@@ -58,15 +58,18 @@ public class GreetingController {
             bis.close();
 
             String outputpath = "C:/Users/alexa/Pictures/temp.jpg";
+            File imageFile = new File(outputpath);
+            if (imageFile.exists()) {
+                imageFile.delete();
+            }
 
-            File imageFile=new File(outputpath);
+
             ImageIO.write(image, "jpg", imageFile);
 
 
         } catch (Exception e) {
             System.out.println("Error Parsing: - ");
         }
-
 
 
         System.out.println("Data Received: " + crunchifyBuilder.toString());
