@@ -13,14 +13,10 @@ import java.util.List;
 /**
  * Created by asoel on 09.06.2016.
  */
-@Stateless
+
 public class JpaTest {
 
-    @PersistenceContext(unitName = "photoPersistence")
-    private EntityManager _entityManager;
-
-
-    public JpaTest() {
+    public JpaTest(EntityManager manager) {
 
     }
 
@@ -31,22 +27,28 @@ public class JpaTest {
     public static void main(String[] args) {
 
 
-        //EntityManager factory = Persistence.createEntityManagerFactory("photoPersistence");
-        //EntityManager manager = factory.createEntityManager();
-        JpaTest test = new JpaTest();
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("eadworkorderPU-UNITTEST");
+        EntityManager manager = factory.createEntityManager();
+        JpaTest test = new JpaTest(manager);
 
-        //EntityTransaction tx = _entityManager.getTransaction();
+        EntityTransaction tx = manager.getTransaction();
+        tx.begin();
+        try {
+            test.createPhotos(manager);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tx.commit();
 
-        test.createPhotos();
+        test.listPhotos(manager);
+
+        System.out.println(".. done");
 
 
     }
 
-    private void createPhotos() {
-        EntityTransaction tx = _entityManager.getTransaction();
-        tx.begin();
-
-        int numOfEmployees = _entityManager.createQuery("Select a From Photo a", Photo.class).getResultList().size();
+    private void createPhotos(EntityManager manager) {
+        int numOfEmployees = manager.createQuery("Select a From Photo a", Photo.class).getResultList().size();
         if (numOfEmployees == 0) {
             Photo photo = new Photo();
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
@@ -54,14 +56,13 @@ public class JpaTest {
             String readableDate = sdf.format(dt);
             photo.setDate(readableDate);
 
-            _entityManager.persist(photo);
-            tx.commit();
+            manager.persist(photo);
 
         }
     }
 
-    private void listPhotos() {
-        List<Photo> resultList = _entityManager.createQuery("Select a From Photo a", Photo.class).getResultList();
+    private void listPhotos(EntityManager manager) {
+        List<Photo> resultList = manager.createQuery("Select a From Photo a", Photo.class).getResultList();
         System.out.println("num of employess:" + resultList.size());
         for (Photo next : resultList) {
             System.out.println("next Photo: " + next);
