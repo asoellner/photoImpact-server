@@ -13,7 +13,7 @@
             <!-- property name="eclipselink.session.customizer" value="org.eclipse.persistence.example.unified.integration.JPAEclipseLinkSessionCustomizer"/-->
             <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.DerbyPlatform"/>
             <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:C:/Users/asoel/derby/photoImpact;create=true"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:C:/Users/asoel/derby/photoImpact;create=false"/>
             <property name="javax.persistence.jdbc.user" value="alex"/>
             <property name="javax.persistence.jdbc.password" value="alex"/>
 
@@ -25,8 +25,10 @@
             <property name="eclipselink.cache.shared.default" value="false"/>
 
             <!-- uncomment the following once - if you wish to have your database tables created by EclipseLink -->
-            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+
+            <!--property name="eclipselink.ddl-generation" value="drop-and-create-tables"-->
             <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+
 
             <!--property name="eclipselink.create-ddl-jdbc-file-name" value="createDDL_ddlGeneration.jdbc"/>
             <property name="eclipselink.drop-ddl-jdbc-file-name" value="dropDDL_ddlGeneration.jdbc"/-->

@@ -49,16 +49,16 @@ public class JpaTest {
 
     private void createPhotos(EntityManager manager) {
         int numOfEmployees = manager.createQuery("Select a From Photo a", Photo.class).getResultList().size();
-        if (numOfEmployees == 0) {
-            Photo photo = new Photo();
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
-            Date dt = new Date();
-            String readableDate = sdf.format(dt);
-            photo.setDate(readableDate);
+        //if (numOfEmployees == 0) {
+        Photo photo = new Photo();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
+        Date dt = new Date();
+        String readableDate = sdf.format(dt);
+        photo.setDate(readableDate);
 
-            manager.persist(photo);
+        manager.persist(photo);
 
-        }
+        //}
     }
 
     private void listPhotos(EntityManager manager) {
