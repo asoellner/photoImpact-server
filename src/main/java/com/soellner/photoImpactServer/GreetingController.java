@@ -38,11 +38,14 @@ import java.util.logging.Logger;
 @Path("/greeting")
 public class GreetingController {
 
+    private static String PERSISTENCE_UNIT="photoPersistence_home";
+    //private static String PERSISTENCE_UNIT="photoPersistence_work";
+
 
     @POST
     @Path("/crunchifyService")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response crunchifyREST(InputStream incomingData) {
+
+    public void crunchifyREST(InputStream incomingData) {
         StringBuilder crunchifyBuilder = new StringBuilder();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(incomingData));
@@ -75,9 +78,12 @@ public class GreetingController {
 */
 
 
-            EntityManagerFactory factory = Persistence.createEntityManagerFactory("photoPersistence");
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
             EntityManager manager = factory.createEntityManager();
 
+
+            List<Photo> resultList = manager.createQuery("Select a From Photo a", Photo.class).getResultList();
+            System.out.println("num of photos:" + resultList.size());
 
             EntityTransaction tx = manager.getTransaction();
             tx.begin();
@@ -99,22 +105,14 @@ public class GreetingController {
         }
 
 
-        System.out.println("Data Received: " + crunchifyBuilder.toString());
+       // System.out.println("Data Received: " + crunchifyBuilder.toString());
 
         // return HTTP response 200 in case of success
-        return Response.status(200).entity(crunchifyBuilder.toString()).build();
+        //return Response.status(200).entity();
     }
 
 
-    @GET
-    @Path("/verify")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response verifyRESTService(InputStream incomingData) {
-        String result = "CrunchifyRESTService Successfully started..";
 
-        // return HTTP response 200 in case of success
-        return Response.status(200).entity(result).build();
-    }
 
     @GET
     @Path("ping")
