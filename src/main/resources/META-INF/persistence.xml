@@ -4,16 +4,16 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
                         http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
-    <persistence-unit name="eadworkorderPU-UNITTEST" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="photoPersistence" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-
+        <class>com.soellner.photoImpactServer.data.Photo</class>
 
         <properties>
             <!-- there is no need for JNDI customization for a direct connection -->
             <!-- property name="eclipselink.session.customizer" value="org.eclipse.persistence.example.unified.integration.JPAEclipseLinkSessionCustomizer"/-->
             <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.DerbyPlatform"/>
             <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:photoImpact;create=true"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:C:/Users/asoel/derby/photoImpact;create=true"/>
             <property name="javax.persistence.jdbc.user" value="alex"/>
             <property name="javax.persistence.jdbc.password" value="alex"/>
 
@@ -32,5 +32,7 @@
             <property name="eclipselink.drop-ddl-jdbc-file-name" value="dropDDL_ddlGeneration.jdbc"/-->
         </properties>
     </persistence-unit>
+
+
 
 </persistence>

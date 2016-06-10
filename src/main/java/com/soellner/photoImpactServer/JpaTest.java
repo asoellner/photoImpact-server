@@ -27,7 +27,7 @@ public class JpaTest {
     public static void main(String[] args) {
 
 
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("eadworkorderPU-UNITTEST");
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("photoPersistence");
         EntityManager manager = factory.createEntityManager();
         JpaTest test = new JpaTest(manager);
 
