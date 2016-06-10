@@ -34,7 +34,7 @@ public class JpaTest {
         EntityTransaction tx = manager.getTransaction();
         tx.begin();
         try {
-            //test.createPhotos(manager);
+            test.createPhotos(manager);
         } catch (Exception e) {
             e.printStackTrace();
         }

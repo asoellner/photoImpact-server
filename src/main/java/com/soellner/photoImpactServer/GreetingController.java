@@ -1,12 +1,17 @@
 package com.soellner.photoImpactServer;
 
 
+import com.soellner.photoImpactServer.data.Photo;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.core.util.Base64;
 import org.json.JSONObject;
 import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,8 +60,9 @@ public class GreetingController {
             BASE64Decoder decoder = new BASE64Decoder();
             imageByte = decoder.decodeBuffer(imageAsBase64);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-            image = ImageIO.read(bis);
-            bis.close();
+            //image = ImageIO.read(bis);
+
+/*
 
             String outputpath = "C:/Users/alexa/Pictures/temp.jpg";
             File imageFile = new File(outputpath);
@@ -65,7 +72,27 @@ public class GreetingController {
 
 
             ImageIO.write(image, "jpg", imageFile);
+*/
 
+
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory("photoPersistence");
+            EntityManager manager = factory.createEntityManager();
+
+
+            EntityTransaction tx = manager.getTransaction();
+            tx.begin();
+
+            Photo photo = new Photo();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
+            Date dt = new Date();
+            String readableDate = sdf.format(dt);
+            photo.setDate(readableDate);
+            photo.setImage(imageByte);
+
+            manager.persist(photo);
+
+            tx.commit();
+            bis.close();
 
         } catch (Exception e) {
             System.out.println("Error Parsing: - ");
