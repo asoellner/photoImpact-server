@@ -6,8 +6,10 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.core.util.Base64;
 import org.json.JSONObject;
 import sun.misc.BASE64Decoder;
+import sun.util.logging.resources.logging;
 
 import javax.imageio.ImageIO;
+import javax.imageio.spi.ServiceRegistry;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -38,7 +40,10 @@ import java.util.logging.Logger;
 @Path("/greeting")
 public class GreetingController {
 
-    private static String PERSISTENCE_UNIT="photoPersistence_home";
+    Logger logger = Logger.getLogger(getClass().getName());
+
+
+    private static String PERSISTENCE_UNIT = "photosMySQL";
     //private static String PERSISTENCE_UNIT="photoPersistence_work";
 
 
@@ -59,10 +64,10 @@ public class GreetingController {
             //byte[] decodedBytes = Base64.decode(imageAsBase64);
 
             BufferedImage image = null;
-            byte[] imageByte;
+            byte[] imageBytes;
             BASE64Decoder decoder = new BASE64Decoder();
-            imageByte = decoder.decodeBuffer(imageAsBase64);
-            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            imageBytes = decoder.decodeBuffer(imageAsBase64);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
             //image = ImageIO.read(bis);
 
 /*
@@ -93,25 +98,39 @@ public class GreetingController {
             Date dt = new Date();
             String readableDate = sdf.format(dt);
             photo.setDate(readableDate);
-            photo.setImage(imageByte);
+            photo.setImage(imageBytes);
 
             manager.persist(photo);
 
             tx.commit();
             bis.close();
 
+
+            String ss = humanReadableByteCount(imageBytes.length, true);
+
+            logger.log(Level.ALL, ss);
+
+            System.err.println(ss);
+
         } catch (Exception e) {
             System.out.println("Error Parsing: - ");
         }
 
 
-       // System.out.println("Data Received: " + crunchifyBuilder.toString());
+        // System.out.println("Data Received: " + crunchifyBuilder.toString());
 
         // return HTTP response 200 in case of success
         //return Response.status(200).entity();
     }
 
 
+    public static String humanReadableByteCount(long bytes, boolean si) {
+        int unit = si ? 1000 : 1024;
+        if (bytes < unit) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(unit));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    }
 
 
     @GET

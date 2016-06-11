@@ -7,8 +7,32 @@
     <groupId>groupId</groupId>
     <artifactId>RestfUL</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <repositories>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
+
+        <repository>
+            <id>java.net.m2</id>
+            <name>java.net m2 repo</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+    </repositories>
+
 
     <dependencies>
+
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
@@ -35,17 +59,10 @@
 
 
         <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>10.11.1.1</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.24</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derby</artifactId>
-            <version>LATEST</version>
-        </dependency>
-
 
     </dependencies>
 
@@ -59,6 +76,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.4</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
             </plugin>
         </plugins>
     </build>
