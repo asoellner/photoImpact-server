@@ -1,6 +1,7 @@
 package com.soellner.photoImpactServer;
 
 import com.soellner.photoImpactServer.data.Photo;
+import com.soellner.photoImpactServer.data.User;
 
 import javax.ejb.Stateless;
 import javax.naming.InitialContext;
@@ -34,13 +35,14 @@ public class JpaTest {
         EntityTransaction tx = manager.getTransaction();
         tx.begin();
         try {
-            test.createPhotos(manager);
+            //test.createPhotos(manager);
+            test.createUser(manager);
         } catch (Exception e) {
             e.printStackTrace();
         }
         tx.commit();
 
-        test.listPhotos(manager);
+        //test.listPhotos(manager);
 
         System.out.println(".. done");
 
@@ -70,4 +72,20 @@ public class JpaTest {
     }
 
 
-}
+    private void createUser(EntityManager manager) {
+        int numOfEmployees = manager.createQuery("Select a From User a", User.class).getResultList().size();
+        //if (numOfEmployees == 0) {
+        if (numOfEmployees == 0) {
+            User user = new User();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
+            Date dt = new Date();
+            String readableDate = sdf.format(dt);
+            user.setCreationDate(readableDate);
+            user.setLogin("bigbuTT");
+            user.setPass("pass");
+            manager.persist(user);
+            System.out.println("created user: " + user);
+        }
+    }
+
+    }
