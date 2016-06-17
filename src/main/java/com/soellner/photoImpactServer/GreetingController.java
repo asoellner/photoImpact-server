@@ -70,6 +70,8 @@ public class GreetingController {
             ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
             //image = ImageIO.read(bis);
 
+
+
 /*
 
             String outputpath = "C:/Users/alexa/Pictures/temp.jpg";
@@ -87,8 +89,8 @@ public class GreetingController {
             EntityManager manager = factory.createEntityManager();
 
 
-            List<Photo> resultList = manager.createQuery("Select a From Photo a", Photo.class).getResultList();
-            System.out.println("num of photos:" + resultList.size());
+            //List<Photo> resultList = manager.createQuery("Select a From Photo a", Photo.class).getResultList();
+            //System.out.println("num of photos:" + resultList.size());
 
             EntityTransaction tx = manager.getTransaction();
             tx.begin();
@@ -99,6 +101,21 @@ public class GreetingController {
             String readableDate = sdf.format(dt);
             photo.setDate(readableDate);
             photo.setImage(imageBytes);
+            String dateTime = ((String) jsonObject.get("TAG_DATETIME")).trim();
+            String latidue = ((String) jsonObject.get("TAG_GPS_LATITUDE")).trim();
+            String longitude = ((String) jsonObject.get("TAG_GPS_LONGITUDE")).trim();
+            if (!dateTime.equals("") && !dateTime.equals("null")) {
+                photo.setOriginalDateTime(dateTime);
+            }
+
+            if (!latidue.equals("") && !latidue.equals("null")) {
+                photo.setGpsLatidude(latidue);
+            }
+
+            if (!longitude.equals("") && !longitude.equals("null")) {
+                photo.setGpsLongitude(longitude);
+            }
+
 
             manager.persist(photo);
 

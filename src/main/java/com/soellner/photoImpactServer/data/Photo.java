@@ -14,6 +14,9 @@ public class Photo {
     private String _id;
     private String _date;
     private byte[] _image;
+    private String _originalDateTime;
+    private String _gpsLatidude;
+    private String _gpsLongitude;
 
 
     public Photo() {
@@ -24,6 +27,34 @@ public class Photo {
     public String getId() {
         return _id;
     }
+
+
+    public String getOriginalDateTime() {
+        return _originalDateTime;
+    }
+
+    public void setOriginalDateTime(String originalDateTime) {
+        _originalDateTime = originalDateTime;
+    }
+
+    public String getGpsLatidude() {
+        return _gpsLatidude;
+    }
+
+    public void setGpsLatidude(String gpsLatidude) {
+        _gpsLatidude = gpsLatidude;
+    }
+
+
+
+    public String getGpsLongitude() {
+        return _gpsLongitude;
+    }
+
+    public void setGpsLongitude(String gpsLongitude) {
+        _gpsLongitude = gpsLongitude;
+    }
+
 
     public void setId(String id) {
         _id = id;
@@ -49,8 +80,11 @@ public class Photo {
     @Override
     public String toString() {
         return "Photo{" +
-                "_id='" + _id + '\'' +
-                ", _date='" + _date + '\'' +
+                "_date='" + _date + '\'' +
+                ", _originalDateTime='" + _originalDateTime + '\'' +
+                ", _gpsLatidude='" + _gpsLatidude + '\'' +
+                ", _gpsLongitude='" + _gpsLongitude + '\'' +
+                ", _id='" + _id + '\'' +
                 '}';
     }
 }
