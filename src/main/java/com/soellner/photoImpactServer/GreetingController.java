@@ -1,6 +1,7 @@
 package com.soellner.photoImpactServer;
 
 
+import com.soellner.photoImpactServer.data.Location;
 import com.soellner.photoImpactServer.data.Photo;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.core.util.Base64;
@@ -43,8 +44,62 @@ public class GreetingController {
     Logger logger = Logger.getLogger(getClass().getName());
 
 
-    private static String PERSISTENCE_UNIT = "photosMySQL";
+    private static String PERSISTENCE_PHOTO_UNIT = "photosMySQL";
+    private static String PERSISTENCE_LOCATIONS_UNIT = "locationsMySQL";
     //private static String PERSISTENCE_UNIT="photoPersistence_work";
+
+
+
+    @POST
+    @Path("/saveLocation")
+
+    public void saveLocation(InputStream incomingData) {
+        StringBuilder locationsBuilder = new StringBuilder();
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(incomingData));
+            String line = null;
+            while ((line = in.readLine()) != null) {
+                locationsBuilder.append(line);
+            }
+
+            JSONObject jsonObject = new JSONObject(locationsBuilder.toString());
+
+            int userID=(int)jsonObject.get("userID");
+            double latidue=jsonObject.getDouble("latitude");
+            double longitude=jsonObject.getDouble("longitude");
+
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_LOCATIONS_UNIT);
+            EntityManager manager = factory.createEntityManager();
+
+            EntityTransaction tx = manager.getTransaction();
+            tx.begin();
+
+            Location location = new Location();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
+            Date dt = new Date();
+            String readableDate = sdf.format(dt);
+            location.setDateTime(readableDate);
+            location.setLatitude(latidue);
+            location.setLongitude(longitude);
+            location.setUserID(userID);
+
+            manager.persist(location);
+
+            tx.commit();
+
+
+        } catch (Exception e) {
+            System.out.println("Error Parsing: - ");
+        }
+
+
+        // System.out.println("Data Received: " + locationsBuilder.toString());
+
+        // return HTTP response 200 in case of success
+        //return Response.status(200).entity();
+    }
+
+
 
 
     @POST
@@ -85,7 +140,7 @@ public class GreetingController {
 */
 
 
-            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_PHOTO_UNIT);
             EntityManager manager = factory.createEntityManager();
 
 
@@ -102,20 +157,21 @@ public class GreetingController {
             photo.setDate(readableDate);
             photo.setImage(imageBytes);
             String dateTime = ((String) jsonObject.get("TAG_DATETIME")).trim();
-            String latidue = ((String) jsonObject.get("TAG_GPS_LATITUDE")).trim();
-            String longitude = ((String) jsonObject.get("TAG_GPS_LONGITUDE")).trim();
-            if (!dateTime.equals("") && !dateTime.equals("null")) {
-                photo.setOriginalDateTime(dateTime);
-            }
 
-            if (!latidue.equals("") && !latidue.equals("null")) {
+            if (!jsonObject.get("TAG_GPS_LATITUDE").toString().equals("")) {
+                Double latidue = (Double) jsonObject.get("TAG_GPS_LATITUDE");
                 photo.setGpsLatidude(latidue);
             }
 
-            if (!longitude.equals("") && !longitude.equals("null")) {
+            if (!jsonObject.get("TAG_GPS_LONGITUDE").toString().equals("")) {
+                Double longitude = (Double) jsonObject.get("TAG_GPS_LONGITUDE");
                 photo.setGpsLongitude(longitude);
             }
 
+
+            if (!dateTime.equals("") && !dateTime.equals("null")) {
+                photo.setOriginalDateTime(dateTime);
+            }
 
             manager.persist(photo);
 

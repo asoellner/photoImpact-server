@@ -28,6 +28,21 @@ public class JpaTest {
     public static void main(String[] args) {
 
 
+        //createPhotos();
+        createLocation();
+
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("locationsMySQL");
+        EntityManager manager = factory.createEntityManager();
+
+
+    }
+
+    private static void createLocation() {
+
+
+    }
+
+    private static void createPhotos() {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("photosMySQL");
         EntityManager manager = factory.createEntityManager();
         JpaTest test = new JpaTest(manager);
@@ -45,7 +60,6 @@ public class JpaTest {
         //test.listPhotos(manager);
 
         System.out.println(".. done");
-
 
     }
 
