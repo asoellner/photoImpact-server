@@ -3,33 +3,23 @@ package com.soellner.photoImpactServer;
 
 import com.soellner.photoImpactServer.data.Location;
 import com.soellner.photoImpactServer.data.Photo;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.core.util.Base64;
-import org.json.JSONObject;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import sun.misc.BASE64Decoder;
-import sun.util.logging.resources.logging;
 
-import javax.imageio.ImageIO;
-import javax.imageio.spi.ServiceRegistry;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,6 +39,22 @@ public class GreetingController {
     //private static String PERSISTENCE_UNIT="photoPersistence_work";
 
 
+    @GET
+    @Path("/print/")
+    @Produces("application/json")
+    public String produceJSON() {
+        System.out.println("RESTful Service 'MessageService' is running ==> ping");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Test", "ok");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject.toString();
+
+    }
+
 
     @POST
     @Path("/saveLocation")
@@ -64,9 +70,9 @@ public class GreetingController {
 
             JSONObject jsonObject = new JSONObject(locationsBuilder.toString());
 
-            int userID=(int)jsonObject.get("userID");
-            double latidue=jsonObject.getDouble("latitude");
-            double longitude=jsonObject.getDouble("longitude");
+            int userID = (Integer) jsonObject.get("userID");
+            double latidue = jsonObject.getDouble("latitude");
+            double longitude = jsonObject.getDouble("longitude");
 
             EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_LOCATIONS_UNIT);
             EntityManager manager = factory.createEntityManager();
@@ -98,8 +104,6 @@ public class GreetingController {
         // return HTTP response 200 in case of success
         //return Response.status(200).entity();
     }
-
-
 
 
     @POST
@@ -211,6 +215,21 @@ public class GreetingController {
     public String getServerTime() {
         System.out.println("RESTful Service 'MessageService' is running ==> ping");
         return "received ping on " + new Date().toString();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("connectionTest")
+    public JSONObject connectionTest() {
+        System.out.println("RESTful Service 'MessageService' is running ==> ping");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("Test", "ok");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
     }
 
     @POST
