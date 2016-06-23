@@ -3,8 +3,9 @@ package com.soellner.photoImpactServer;
 
 import com.soellner.photoImpactServer.data.Location;
 import com.soellner.photoImpactServer.data.Photo;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import sun.misc.BASE64Decoder;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -40,9 +42,24 @@ public class GreetingController {
 
 
     @GET
-    @Path("/print/")
+    @Path("/print2/")
     @Produces("application/json")
-    public String produceJSON() {
+    //@Produces({MediaType.APPLICATION_JSON})
+    //@Produces(MediaType.APPLICATION_XML)
+    public Klump produceJSON2() {
+        Klump klump = new Klump("Sepp", 23);
+
+        return klump;
+
+    }
+
+
+    @GET
+    @Path("/print/")
+    //@Produces("application/json")
+    @Produces("application/json")
+    //@Produces(MediaType.APPLICATION_XML)
+    public JSONObject produceJSON() {
         System.out.println("RESTful Service 'MessageService' is running ==> ping");
         JSONObject jsonObject = new JSONObject();
         try {
@@ -51,7 +68,7 @@ public class GreetingController {
             e.printStackTrace();
         }
 
-        return jsonObject.toString();
+        return jsonObject;
 
     }
 
@@ -272,4 +289,30 @@ public class GreetingController {
         resp.getWriter().write("Hello Sepp1111");
     }
 */
+    @XmlRootElement
+    public class Klump {
+        private String _name;
+        private int _age;
+
+        public Klump(String name, int age) {
+            _name = name;
+            _age = age;
+        }
+
+        public String getName() {
+            return _name;
+        }
+
+        public void setName(String name) {
+            _name = name;
+        }
+
+        public int getAge() {
+            return _age;
+        }
+
+        public void setAge(int age) {
+            _age = age;
+        }
+    }
 }
