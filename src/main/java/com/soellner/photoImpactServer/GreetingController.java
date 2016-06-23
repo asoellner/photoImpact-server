@@ -3,7 +3,6 @@ package com.soellner.photoImpactServer;
 
 import com.soellner.photoImpactServer.data.Location;
 import com.soellner.photoImpactServer.data.Photo;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import sun.misc.BASE64Decoder;
@@ -39,6 +38,29 @@ public class GreetingController {
     private static String PERSISTENCE_PHOTO_UNIT = "photosMySQL";
     private static String PERSISTENCE_LOCATIONS_UNIT = "locationsMySQL";
     //private static String PERSISTENCE_UNIT="photoPersistence_work";
+
+
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN})
+    @Path("/checkLogin")
+    public String postMessage(InputStream incomingData) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(incomingData));
+        String line = null;
+        StringBuilder userBuilder = new StringBuilder();
+        while ((line = in.readLine()) != null) {
+            userBuilder.append(line);
+        }
+
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_LOCATIONS_UNIT);
+        EntityManager manager = factory.createEntityManager();
+
+
+        //System.out.println("First Name = " + user.get("login"));
+        //System.out.println("Last Name  = " + user.get("password"));
+
+        return "ok";
+    }
 
 
     @GET
