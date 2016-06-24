@@ -31,14 +31,31 @@ public class JpaTest {
         //createPhotos();
         createLocation();
 
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("locationsMySQL");
-        EntityManager manager = factory.createEntityManager();
+        //EntityManagerFactory factory = Persistence.createEntityManagerFactory("locationsMySQL");
+        //EntityManager manager = factory.createEntityManager();
 
 
     }
 
     private static void createLocation() {
-
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("locationsMySQL");
+        EntityManager manager = factory.createEntityManager();
+        int numOfEmployees = manager.createQuery("Select a From User a", User.class).getResultList().size();
+        //if (numOfEmployees == 0) {
+        if (numOfEmployees == 0) {
+            EntityTransaction tx = manager.getTransaction();
+            tx.begin();
+            User user = new User();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
+            Date dt = new Date();
+            String readableDate = sdf.format(dt);
+            user.setCreationDate(readableDate);
+            user.setLogin("alex");
+            user.setPass("password");
+            manager.persist(user);
+            System.out.println("created user: " + user);
+            tx.commit();
+        }
 
     }
 

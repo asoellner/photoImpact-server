@@ -3,6 +3,7 @@ package com.soellner.photoImpactServer;
 
 import com.soellner.photoImpactServer.data.Location;
 import com.soellner.photoImpactServer.data.Photo;
+import com.soellner.photoImpactServer.data.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 import sun.misc.BASE64Decoder;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,14 +54,28 @@ public class GreetingController {
             userBuilder.append(line);
         }
 
+        JSONObject jsonObject = new JSONObject(userBuilder.toString());
+
+        String username = (String) jsonObject.get("username");
+        String password = (String) jsonObject.get("password");
+
+
+
         EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_LOCATIONS_UNIT);
         EntityManager manager = factory.createEntityManager();
 
 
+
+        List<User> users = manager.createQuery("Select a From User a where a.login=?1 AND a.pass=?2", User.class).setParameter(1, username).setParameter(2, password).getResultList();
+        if (!users.isEmpty()) {
+            return "ok";
+
+        }
+
         //System.out.println("First Name = " + user.get("login"));
         //System.out.println("Last Name  = " + user.get("password"));
 
-        return "ok";
+        return "not authorized";
     }
 
 
@@ -109,12 +125,22 @@ public class GreetingController {
 
             JSONObject jsonObject = new JSONObject(locationsBuilder.toString());
 
-            int userID = (Integer) jsonObject.get("userID");
+            //int userID = (Integer) jsonObject.get("userID");
             double latidue = jsonObject.getDouble("latitude");
             double longitude = jsonObject.getDouble("longitude");
+            String username = jsonObject.getString("username");
+            String password = jsonObject.getString("password");
 
             EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_LOCATIONS_UNIT);
             EntityManager manager = factory.createEntityManager();
+
+
+
+            List<User> users = manager.createQuery("Select a From User a where a.login=?1 AND a.pass=?2", User.class).setParameter(1, username).setParameter(2, password).getResultList();
+            if (users.isEmpty()) {
+                return;
+            }
+
 
             EntityTransaction tx = manager.getTransaction();
             tx.begin();
@@ -126,7 +152,7 @@ public class GreetingController {
             location.setDateTime(readableDate);
             location.setLatitude(latidue);
             location.setLongitude(longitude);
-            location.setUserID(userID);
+            location.setUserID(new Integer(users.get(0).getId()));
 
             manager.persist(location);
 

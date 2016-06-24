@@ -22,7 +22,7 @@
 
     <persistence-unit name="locationsMySQL" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-
+        <class>com.soellner.photoImpactServer.data.User</class>
         <class>com.soellner.photoImpactServer.data.Location</class>
         <properties>
             <property name="eclipselink.jdbc.password" value="alex"/>
