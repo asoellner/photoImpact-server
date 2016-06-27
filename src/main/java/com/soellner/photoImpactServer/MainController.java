@@ -31,15 +31,14 @@ import java.util.logging.Logger;
  */
 
 //@WebServlet(name = "com.soellner.photoImpactServer.Greeting", urlPatterns = "/greeting")
-@Path("/greeting")
-public class GreetingController {
+@Path("/main")
+public class MainController {
 
     Logger logger = Logger.getLogger(getClass().getName());
 
 
-    private static String PERSISTENCE_PHOTO_UNIT = "photosMySQL";
-    private static String PERSISTENCE_LOCATIONS_UNIT = "locationsMySQL";
-    //private static String PERSISTENCE_UNIT="photoPersistence_work";
+
+    private static String PERSISTENCE_UNIT = "soellnerMySQL";
 
 
     @POST
@@ -59,11 +58,8 @@ public class GreetingController {
         String username = (String) jsonObject.get("username");
         String password = (String) jsonObject.get("password");
 
-
-
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_LOCATIONS_UNIT);
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         EntityManager manager = factory.createEntityManager();
-
 
 
         List<User> users = manager.createQuery("Select a From User a where a.login=?1 AND a.pass=?2", User.class).setParameter(1, username).setParameter(2, password).getResultList();
@@ -72,43 +68,11 @@ public class GreetingController {
 
         }
 
-        //System.out.println("First Name = " + user.get("login"));
-        //System.out.println("Last Name  = " + user.get("password"));
 
         return "not authorized";
     }
 
 
-    @GET
-    @Path("/print2/")
-    @Produces("application/json")
-    //@Produces({MediaType.APPLICATION_JSON})
-    //@Produces(MediaType.APPLICATION_XML)
-    public Klump produceJSON2() {
-        Klump klump = new Klump("Sepp", 23);
-
-        return klump;
-
-    }
-
-
-    @GET
-    @Path("/print/")
-    //@Produces("application/json")
-    @Produces("application/json")
-    //@Produces(MediaType.APPLICATION_XML)
-    public JSONObject produceJSON() {
-        System.out.println("RESTful Service 'MessageService' is running ==> ping");
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("Test", "ok");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return jsonObject;
-
-    }
 
 
     @POST
@@ -131,7 +95,7 @@ public class GreetingController {
             String username = jsonObject.getString("username");
             String password = jsonObject.getString("password");
 
-            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_LOCATIONS_UNIT);
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
             EntityManager manager = factory.createEntityManager();
 
 
@@ -146,10 +110,10 @@ public class GreetingController {
             tx.begin();
 
             Location location = new Location();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
             Date dt = new Date();
-            String readableDate = sdf.format(dt);
-            location.setDateTime(readableDate);
+            //String readableDate = sdf.format(dt);
+            location.setDateTime(dt.getTime()+"");
             location.setLatitude(latidue);
             location.setLongitude(longitude);
             location.setUserID(new Integer(users.get(0).getId()));
@@ -172,7 +136,7 @@ public class GreetingController {
 
 
     @POST
-    @Path("/crunchifyService")
+    @Path("/uploadImage")
 
     public void crunchifyREST(InputStream incomingData) {
         StringBuilder crunchifyBuilder = new StringBuilder();
@@ -185,36 +149,18 @@ public class GreetingController {
 
             JSONObject jsonObject = new JSONObject(crunchifyBuilder.toString());
             String imageAsBase64 = (String) jsonObject.get("image");
-            //byte[] decodedBytes = Base64.decode(imageAsBase64);
+
 
             BufferedImage image = null;
             byte[] imageBytes;
             BASE64Decoder decoder = new BASE64Decoder();
             imageBytes = decoder.decodeBuffer(imageAsBase64);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
-            //image = ImageIO.read(bis);
 
 
-
-/*
-
-            String outputpath = "C:/Users/alexa/Pictures/temp.jpg";
-            File imageFile = new File(outputpath);
-            if (imageFile.exists()) {
-                imageFile.delete();
-            }
-
-
-            ImageIO.write(image, "jpg", imageFile);
-*/
-
-
-            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_PHOTO_UNIT);
+            EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
             EntityManager manager = factory.createEntityManager();
 
-
-            //List<Photo> resultList = manager.createQuery("Select a From Photo a", Photo.class).getResultList();
-            //System.out.println("num of photos:" + resultList.size());
 
             EntityTransaction tx = manager.getTransaction();
             tx.begin();
@@ -248,31 +194,13 @@ public class GreetingController {
             bis.close();
 
 
-            String ss = humanReadableByteCount(imageBytes.length, true);
-
-            logger.log(Level.ALL, ss);
-
-            System.err.println(ss);
 
         } catch (Exception e) {
             System.out.println("Error Parsing: - ");
         }
 
-
-        // System.out.println("Data Received: " + crunchifyBuilder.toString());
-
-        // return HTTP response 200 in case of success
-        //return Response.status(200).entity();
     }
 
-
-    public static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
-        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
-    }
 
 
     @GET
@@ -282,85 +210,6 @@ public class GreetingController {
         return "received ping on " + new Date().toString();
     }
 
-    @GET
-    @Produces("application/json")
-    @Path("connectionTest")
-    public JSONObject connectionTest() {
-        System.out.println("RESTful Service 'MessageService' is running ==> ping");
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("Test", "ok");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return jsonObject;
-    }
-
-    @POST
-    @Path("sepp")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-
-    public void execute(@FormParam(value = "image") String image) {
-        System.out.println(image);
-    }
 
 
-    @POST
-    @Path("/uploadImage")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces("text/plain")
-    public String uploadImage1(@FormParam(value = "image") String image) {
-        InputStream is = new ByteArrayInputStream(image.getBytes());
-        return "received ping on " + new Date().toString();
-    }
-
-
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    @Path("/test")
-    public String sayXMLHello() {
-        return "<?xml version=\"1.0\"?>" + "<hello> Hello Jersey" + "</hello>";
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_XML)
-    @Path("/test2")
-    public String sayXMLHello2() {
-        return "<?xml version=\"1.0\"?>" + "<hello> Hello Jersey2" + "</hello>";
-    }
-
-
-    /*
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write("Hello Sepp1111");
-    }
-*/
-    @XmlRootElement
-    public class Klump {
-        private String _name;
-        private int _age;
-
-        public Klump(String name, int age) {
-            _name = name;
-            _age = age;
-        }
-
-        public String getName() {
-            return _name;
-        }
-
-        public void setName(String name) {
-            _name = name;
-        }
-
-        public int getAge() {
-            return _age;
-        }
-
-        public void setAge(int age) {
-            _age = age;
-        }
-    }
 }

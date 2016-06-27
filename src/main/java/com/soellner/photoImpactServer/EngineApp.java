@@ -61,7 +61,7 @@ public class EngineApp extends Application {
     public Set<Object> getSingletons() {
         final Set<Object> instances = new HashSet<Object>();
 
-        instances.add(new GreetingController());
+        instances.add(new MainController());
         return instances;
     }
 }
