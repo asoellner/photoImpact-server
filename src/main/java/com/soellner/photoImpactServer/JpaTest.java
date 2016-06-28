@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public class JpaTest {
-
+    private static String PERSISTENCE_UNIT = "soellnerMySQL";
     public JpaTest(EntityManager manager) {
 
     }
@@ -28,17 +28,16 @@ public class JpaTest {
     public static void main(String[] args) {
 
 
-        //createPhotos();
-        createLocation();
 
-        //EntityManagerFactory factory = Persistence.createEntityManagerFactory("locationsMySQL");
-        //EntityManager manager = factory.createEntityManager();
+        createDefaultUser();
+
+
 
 
     }
 
-    private static void createLocation() {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("locationsMySQL");
+    private static void createDefaultUser() {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
         EntityManager manager = factory.createEntityManager();
         int numOfEmployees = manager.createQuery("Select a From User a", User.class).getResultList().size();
         //if (numOfEmployees == 0) {
@@ -59,64 +58,7 @@ public class JpaTest {
 
     }
 
-    private static void createPhotos() {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("photosMySQL");
-        EntityManager manager = factory.createEntityManager();
-        JpaTest test = new JpaTest(manager);
-
-        EntityTransaction tx = manager.getTransaction();
-        tx.begin();
-        try {
-            //test.createPhotos(manager);
-            test.createUser(manager);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        tx.commit();
-
-        //test.listPhotos(manager);
-
-        System.out.println(".. done");
-
-    }
-
-    private void createPhotos(EntityManager manager) {
-        int numOfEmployees = manager.createQuery("Select a From Photo a", Photo.class).getResultList().size();
-        //if (numOfEmployees == 0) {
-        Photo photo = new Photo();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
-        Date dt = new Date();
-        String readableDate = sdf.format(dt);
-        photo.setDate(readableDate);
-
-        manager.persist(photo);
-
-        //}
-    }
-
-    private void listPhotos(EntityManager manager) {
-        List<Photo> resultList = manager.createQuery("Select a From Photo a", Photo.class).getResultList();
-        System.out.println("num of employess:" + resultList.size());
-        for (Photo next : resultList) {
-            System.out.println("next Photo: " + next);
-        }
-    }
 
 
-    private void createUser(EntityManager manager) {
-        int numOfEmployees = manager.createQuery("Select a From User a", User.class).getResultList().size();
-        //if (numOfEmployees == 0) {
-        if (numOfEmployees == 0) {
-            User user = new User();
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
-            Date dt = new Date();
-            String readableDate = sdf.format(dt);
-            user.setCreationDate(readableDate);
-            user.setLogin("bigbuTT");
-            user.setPass("pass");
-            manager.persist(user);
-            System.out.println("created user: " + user);
-        }
-    }
 
     }
