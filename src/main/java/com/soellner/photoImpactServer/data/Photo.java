@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 @Entity
 public class Photo {
-    private String _id;
+    private int _id;
     private String _date;
     private byte[] _image;
     private String _originalDateTime;
@@ -24,7 +24,7 @@ public class Photo {
 
     @Id
     @GeneratedValue
-    public String getId() {
+    public int getId() {
         return _id;
     }
 
@@ -37,7 +37,7 @@ public class Photo {
         _originalDateTime = originalDateTime;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         _id = id;
     }
 

@@ -9,7 +9,7 @@ import javax.persistence.Id;
  */
 @Entity
 public class User {
-    private String _id;
+    private int _id;
     private String _login;
     private String _pass;
     private String _creationDate="";
@@ -20,11 +20,11 @@ public class User {
 
     @Id
     @GeneratedValue
-    public String getId() {
+    public int getId() {
         return _id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         _id = id;
     }
 

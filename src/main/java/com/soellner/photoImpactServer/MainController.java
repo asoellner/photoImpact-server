@@ -116,7 +116,7 @@ public class MainController {
             location.setDateTime(dt.getTime()+"");
             location.setLatitude(latidue);
             location.setLongitude(longitude);
-            location.setUserID(new Integer(users.get(0).getId()));
+            location.setUserID(users.get(0).getId());
 
             manager.persist(location);
 
