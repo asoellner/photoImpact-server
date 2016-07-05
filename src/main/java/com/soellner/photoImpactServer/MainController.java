@@ -37,7 +37,6 @@ public class MainController {
     Logger logger = Logger.getLogger(getClass().getName());
 
 
-
     private static String PERSISTENCE_UNIT = "soellnerMySQL";
 
 
@@ -73,8 +72,6 @@ public class MainController {
     }
 
 
-
-
     @POST
     @Path("/saveLocation")
 
@@ -99,7 +96,6 @@ public class MainController {
             EntityManager manager = factory.createEntityManager();
 
 
-
             List<User> users = manager.createQuery("Select a From User a where a.login=?1 AND a.pass=?2", User.class).setParameter(1, username).setParameter(2, password).getResultList();
             if (users.isEmpty()) {
                 return;
@@ -113,7 +109,7 @@ public class MainController {
             //SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
             Date dt = new Date();
             //String readableDate = sdf.format(dt);
-            location.setDateTime(dt.getTime()+"");
+            location.setDateTime(dt.getTime() + "");
             location.setLatitude(latidue);
             location.setLongitude(longitude);
             location.setUserID(users.get(0).getId());
@@ -173,13 +169,13 @@ public class MainController {
             photo.setImage(imageBytes);
             String dateTime = ((String) jsonObject.get("TAG_DATETIME")).trim();
 
-            if (!jsonObject.get("TAG_GPS_LATITUDE").toString().equals("")) {
-                Double latidue = (Double) jsonObject.get("TAG_GPS_LATITUDE");
+            if (jsonObject.get("TAG_GPS_LATITUDE")!=null && !jsonObject.get("TAG_GPS_LATITUDE").toString().equals("")) {
+                Double latidue = (Double) jsonObject.getDouble("TAG_GPS_LATITUDE");
                 photo.setGpsLatidude(latidue);
             }
 
-            if (!jsonObject.get("TAG_GPS_LONGITUDE").toString().equals("")) {
-                Double longitude = (Double) jsonObject.get("TAG_GPS_LONGITUDE");
+            if (jsonObject.get("TAG_GPS_LONGITUDE")!=null &&!jsonObject.get("TAG_GPS_LONGITUDE").toString().equals("")) {
+                Double longitude = (Double) jsonObject.getDouble("TAG_GPS_LONGITUDE");
                 photo.setGpsLongitude(longitude);
             }
 
@@ -194,13 +190,11 @@ public class MainController {
             bis.close();
 
 
-
         } catch (Exception e) {
             System.out.println("Error Parsing: - ");
         }
 
     }
-
 
 
     @GET
@@ -209,7 +203,6 @@ public class MainController {
         System.out.println("RESTful Service 'MessageService' is running ==> ping");
         return "received ping on " + new Date().toString();
     }
-
 
 
 }
